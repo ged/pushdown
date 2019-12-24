@@ -1,0 +1,7 @@
+.simplecov
+ChangeLog
+README.md
+Rakefile
+lib/pushdown/automaton.rb
+spec/pushdown/automaton_spec.rb
+spec/spec_helper.rb
