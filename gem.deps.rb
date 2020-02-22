@@ -1,4 +1,8 @@
 source 'https://rubygems.org'
 
-gem 'rake-deveiate', '~> 0.5'
+group :development do
+	gem 'rake-deveiate', '~> 0.5'
+end
+
+
 

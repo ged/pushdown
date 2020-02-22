@@ -4,9 +4,9 @@
 require_relative '../spec_helper'
 
 require 'rspec'
-require 'pushdown/automaton'
+require 'pushdown-automaton'
 
-RSpec.describe Pushdown::Automaton do
+RSpec.describe PushdownAutomaton do
 
 	
 

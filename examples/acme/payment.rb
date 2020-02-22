@@ -4,6 +4,7 @@
 require 'pushdown_automaton'
 
 
+module Acme; end
 
 class Acme::Payment
 	extend PushdownAutomaton
@@ -11,12 +12,18 @@ class Acme::Payment
 
 	automaton( :state ) do
 
-		state :created do
-			
-		end
+		states_from 'acme/payment_state'
+
+		initial_state :created
+		terminal_states :finished, :canceled
 
 	end
 
+
+	### Attempt to process the payment further.
+	def process
+		self.state.update
+	end
 
 
 
@@ -49,3 +56,4 @@ class Acme::Payment
 	#   the active State. Unlike fixed_update, this does not return a Trans.
 
 end # class Acme::Payment
+

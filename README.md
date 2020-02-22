@@ -1,10 +1,10 @@
 # Pushdown-Automaton
 
 home
-: http://deveiate.org/projects/Pushdown-Automaton
+: http://hg.sr.ht/~ged/Pushdown-Automaton
 
 code
-: http://bitbucket.org/ged/Pushdown-Automaton
+: http://hg.sr.ht/~ged/Pushdown-Automaton
 
 github
 : https://github.com/ged/pushdown-automaton
@@ -15,7 +15,10 @@ docs
 
 ## Description
 
+A pushdown automaton toolkit for Ruby. It's based on [the State Manager from
+the Amethyst project][amethyst-state-manager].
 
+It's still mostly experimental.
 
 
 ## Prerequisites
@@ -25,14 +28,14 @@ docs
 
 ## Installation
 
-    $ gem install pushdown-automaton
+    $ gem install pushdown_automaton
 
 
 ## Contributing
 
 You can check out the current development source with Mercurial via its
-{project page}[http://bitbucket.org/ged/pushdown-automaton]. Or if you prefer Git, via 
-{its Github mirror}[https://github.com/ged/pushdown-automaton].
+[project page](http://bitbucket.org/ged/pushdown_automaton). Or if you prefer
+Git, via [its Github mirror](https://github.com/ged/pushdown-automaton).
 
 After checking out the source, run:
 
@@ -44,7 +47,7 @@ and generate the API documentation.
 
 ## License
 
-Copyright (c) 2019, Michael Granger
+Copyright (c) 2019-2020, Michael Granger
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -72,4 +75,6 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
+[amethyst-state-manager]: https://book.amethyst.rs/stable/concepts/state.html#state-manager
 
