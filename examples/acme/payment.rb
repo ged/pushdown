@@ -1,29 +1,21 @@
 # -*- ruby -*-
 # frozen_string_literal: true
 
-require 'pushdown_automaton'
+require 'pushdown'
 
 
 module Acme; end
 
 class Acme::Payment
-	extend PushdownAutomaton
+	extend Pushdown::Automaton
 
 
-	automaton( :state ) do
-
-		states_from 'acme/payment_state'
-
-		initial_state :created
-		terminal_states :finished, :canceled
-
-	end
+	pushdown_state :state,
+		states_from: 'acme/payment_state',
+		initial_state: :created
 
 
-	### Attempt to process the payment further.
-	def process
-		self.state.update
-	end
+	alias_method :process, :update
 
 end # class Acme::Payment
 

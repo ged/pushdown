@@ -1,7 +1,7 @@
 .simplecov
-ChangeLog
+History.md
 README.md
 Rakefile
-lib/pushdown_automaton.rb
-spec/pushdown_automaton_spec.rb
+lib/pushdown.rb
+spec/pushdown_spec.rb
 spec/spec_helper.rb

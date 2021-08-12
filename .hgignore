@@ -1,4 +1,12 @@
-coverage/
-\.esproj/
-\.yml$
+html/
+docs/
+spec/\.status
+\.devel$
 \.lock$
+\.log$
+\.gem$
+^ChangeLog$
+doc/
+\.sqlite$
+etc/key(\.pub)?
+\.pid$

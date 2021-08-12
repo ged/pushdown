@@ -1,16 +1,16 @@
-# Pushdown-Automaton
+# Pushdown
 
 home
-: http://hg.sr.ht/~ged/Pushdown-Automaton
+: http://hg.sr.ht/~ged/Pushdown
 
 code
-: http://hg.sr.ht/~ged/Pushdown-Automaton
+: http://hg.sr.ht/~ged/Pushdown
 
 github
-: https://github.com/ged/pushdown-automaton
+: https://github.com/ged/pushdown
 
 docs
-: http://deveiate.org/code/pushdown-automaton
+: http://deveiate.org/code/pushdown
 
 
 ## Description
@@ -28,14 +28,14 @@ It's still mostly experimental.
 
 ## Installation
 
-    $ gem install pushdown_automaton
+    $ gem install pushdown
 
 
 ## Contributing
 
 You can check out the current development source with Mercurial via its
-[project page](http://bitbucket.org/ged/pushdown_automaton). Or if you prefer
-Git, via [its Github mirror](https://github.com/ged/pushdown-automaton).
+[project page](http://bitbucket.org/ged/pushdown). Or if you prefer
+Git, via [its Github mirror](https://github.com/ged/pushdown).
 
 After checking out the source, run:
 
@@ -45,9 +45,14 @@ This task will install any missing dependencies, run the tests/specs,
 and generate the API documentation.
 
 
+## Author(s)
+
+* Michael Granger <ged@faeriemud.org>
+
+
 ## License
 
-Copyright (c) 2019-2020, Michael Granger
+Copyright (c) 2019-2021, Michael Granger
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
