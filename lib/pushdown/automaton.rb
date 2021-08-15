@@ -65,8 +65,13 @@ module Pushdown::Automaton
 	def self::generate_event_method( name, object )
 		self.log.debug "Generating event method for %p: handle_%s_event" % [ object, name ]
 
+		stack_method = object.instance_method( "#{name}_stack" )
 		meth = lambda do |event, *args|
-			self.call_on_event( name, event, *args )
+			stack = stack_method.bind( self ).call
+			current_state = stack.last
+
+			result = current_state.on_event( event, *args )
+			return self.handle_pushdown_result( stack, result, name )
 		end
 	end
 
@@ -104,14 +109,11 @@ module Pushdown::Automaton
 		end
 
 
-		def call_on_event( name, event, *args )
-			stack = self.public_send( "#{name}_stack" )
-			current_state = stack.last
-
-			result = current_state.on_event( event, *args )
-
+		### The body of the event handler, called by the #handle_{name}_event.
+		def handle_pushdown_result( stack, result, name )
 			if result.is_a?( Symbol )
 				transition_name = result
+				current_state = stack.last
 				self.log.debug "Looking up the %p transition for %p" % [ result, current_state ]
 				transition_type, state_class_name = current_state.class.transitions[ transition_name ]
 				raise "no such transition %p for %s" % [ transition_name, name ] unless transition_type
