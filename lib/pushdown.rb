@@ -27,4 +27,5 @@ module Pushdown
 
 end # module Pushdown
 
+Pushdown::Transition.plugin_exclusions( '**/spec/pushdown/transition/**' )
 Pushdown::Transition.load_all

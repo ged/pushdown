@@ -53,10 +53,12 @@ class Pushdown::Transition
 	end
 
 
-	### Create a new Transition with the given +name+ and +args+.
-	def initialize( name, *args )
+	### Create a new Transition with the given +name+. If +data+ is specified, it will be passed 
+	### through the transition callbacks on State (State#on_start, State#on_stop, State#on_pause,
+	### State#on_resume) as it is applied.
+	def initialize( name, data=nil )
 		@name = name
-		@args = args
+		@data = data
 	end
 
 
@@ -69,9 +71,8 @@ class Pushdown::Transition
 	attr_reader :name
 
 	##
-	# Arguments given when the transition is created. This can be used to pass
-	# values between States.
-	attr_reader :args
+	# Data to pass to the transition callbacks when applying this Transition.
+	attr_accessor :data
 
 
 	### Return a state +stack+ after the transition has been applied. 

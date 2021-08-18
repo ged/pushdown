@@ -53,26 +53,26 @@ class Pushdown::State
 	#
 
 	### Stack callback -- called when the state is added to the stack.
-	def on_start( state_data )
+	def on_start( data=nil )
 		return nil # no-op
 	end
 
 
 	### Stack callback -- called when the state is removed from the stack.
-	def on_stop( state_data )
+	def on_stop( data=nil )
 		return nil # no-op
 	end
 
 
 	### Stack callback -- called when another state is pushed over this one.
-	def on_pause( state_data )
+	def on_pause( data=nil )
 		return nil # no-op
 	end
 
 
 	### Stack callback -- called when another state is popped off from in front of
 	### this one, making it the current state.
-	def on_resume( state_data )
+	def on_resume( data=nil )
 		return nil # no-op
 	end
 
@@ -82,14 +82,14 @@ class Pushdown::State
 	#
 
 	### State callback -- interval callback called when the state is the current one.
-	def update( state_data )
+	def update( *data )
 		return nil # no-op
 	end
 
 
 	### State callback -- interval callback called when the state is on the stack,
 	### even when the state is not the current one.
-	def shadow_update( state_data )
+	def shadow_update( *data )
 		return nil # no-op
 	end
 

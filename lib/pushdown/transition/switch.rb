@@ -9,22 +9,31 @@ require 'pushdown/transition' unless defined?( Pushdown::Transition )
 class Pushdown::Transition::Switch < Pushdown::Transition
 
 	### Create a transition that will Switch the current State with an instance of
-	### the given +state_class+ on the stack. Any +args+ given will be passed to the
-	### +state_class+'s constructor.
+	### the given +state_class+ on the stack.
 	def initialize( name, state_class, *args )
 		super( name, *args )
 		@state_class = state_class
 	end
 
 
+	######
+	public
+	######
+
+	##
+	# The State to push to.
+	attr_reader :state_class
+
+
 	### Apply the transition to the given +stack+.
 	def apply( stack )
-		state = self.state_class.new( *self.args )
+		state = self.state_class.new
 
-		self.log.debug "switching current state with a new state: %p." % [ state ]
+		self.log.debug "switching current state with a new state: %p" % [ state ]
 		old_state = stack.pop
-		old_state.on_stop(  )
+		self.data = old_state.on_stop( self.data )
 		stack.push( state )
+		state.on_start( self.data )
 
 		return stack
 	end

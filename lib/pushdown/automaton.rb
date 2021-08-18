@@ -42,8 +42,11 @@ module Pushdown::Automaton
 		event_method = self.generate_event_method( name, object )
 		object.define_method( "handle_#{name}_event", &event_method )
 
-		# update_method = self.generate_update_method( name, object )
-		# object.define_method( "update_#{name}", &update_method )
+		update_method = self.generate_update_method( name, object )
+		object.define_method( "update_#{name}", &update_method )
+
+		update_method = self.generate_shadow_update_method( name, object )
+		object.define_method( "shadow_update_#{name}", &update_method )
 
 		initial_state_method = self.generate_initial_state_method( name )
 		object.define_singleton_method( "initial_#{name}", &initial_state_method )
@@ -76,6 +79,42 @@ module Pushdown::Automaton
 	end
 
 
+	### Generate the timed update method for the active pushdown state named +name+
+	### on the specified +object+.
+	def self::generate_update_method( name, object )
+		self.log.debug "Generating update method for %p: update_%s" % [ object, name ]
+
+		stack_method = object.instance_method( "#{name}_stack" )
+		meth = lambda do |*args|
+			stack = stack_method.bind( self ).call
+			current_state = stack.last
+
+			result = current_state.update( *args )
+			return self.handle_pushdown_result( stack, result, name )
+		end
+	end
+
+
+	### Generate the timed update method for every pushdown state named +name+
+	### on the specified +object+.
+	def self::generate_shadow_update_method( name, object )
+		self.log.debug "Generating shadow update method for %p: shadow_update_%s" % [ object, name ]
+
+		stack_method = object.instance_method( "#{name}_stack" )
+		meth = lambda do |*args|
+			stack = stack_method.bind( self ).call
+			stack.each do |state|
+				state.shadow_update( *args )
+			end
+
+			# :TODO: Calling/return convention? Could do something like #flat_map the
+			# results? Or map to a hash keyed by state object? Is it useful enough to justify
+			# the object churn of a method that might potentionally be in a hot loop?
+			return nil
+		end
+	end
+
+
 	### Generate the method that returns the initial state class for a pushdown
 	### state named +name+.
 	def self::generate_initial_state_method( name )
@@ -102,7 +141,13 @@ module Pushdown::Automaton
 				state_class = self.class.public_send( "initial_#{name}" ) or
 					raise "unset initial_%s while pushing initial state" % [ name ]
 
-				transition = Pushdown::Transition.create( :push, :initial, state_class )
+				data = if self.respond_to?( "initial_#{name}_data" )
+						self.public_send( "initial_#{name}_data" )
+					else
+						nil
+					end
+
+				transition = Pushdown::Transition.create( :push, :initial, state_class, data )
 				stack = transition.apply( [] )
 				self.instance_variable_set( "@#{name}_stack", stack )
 			end

@@ -21,10 +21,13 @@ class Pushdown::Transition::Pop < Pushdown::Transition
 
 	### Apply the transition to the given +stack+.
 	def apply( stack )
-		raise Pushdown::TransitionError, "can't pop the only state on the stack" if
-			stack.length <= 1
+		raise Pushdown::TransitionError, "can't pop from an empty stack" if stack.empty?
+		raise Pushdown::TransitionError, "can't pop the only state on the stack" if stack.length == 1
 
+		self.log.debug "popping a state"
 		@popped_state = stack.pop
+		self.data = @popped_state.on_stop( self.data )
+		stack.last.on_resume( self.data )
 
 		return stack
 	end

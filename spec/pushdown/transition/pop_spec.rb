@@ -16,6 +16,12 @@ RSpec.describe( Pushdown::Transition::Pop ) do
 	let( :state_b ) { state_class.new }
 	let( :state_c ) { state_class.new }
 
+	let( :state_data ) { Object.new }
+
+	let( :stack ) do
+		return [ state_a, state_b, state_c ]
+	end
+
 
 	it "pops the last state from the stack when applied" do
 		stack = [ state_a, state_b, state_c ]
@@ -27,8 +33,29 @@ RSpec.describe( Pushdown::Transition::Pop ) do
 	end
 
 
+	it "passes state data through the transition callbacks" do
+		transition = described_class.new( :pop_test, state_data )
+
+		expect( state_c ).to receive( :on_stop ).with( state_data ).
+			and_return( state_data ).once.ordered
+		expect( state_b ).to receive( :on_resume ).with( state_data ).once.ordered
+
+		transition.apply( stack )
+	end
+
+
 	it "errors if applied to a stack that has only one state" do
 		stack = [ state_a ]
+		transition = described_class.new( :pop_test )
+
+		expect {
+			transition.apply( stack )
+		}.to raise_error( Pushdown::TransitionError, /can't pop/i )
+	end
+
+
+	it "errors if applied to an empty stack" do
+		stack = []
 		transition = described_class.new( :pop_test )
 
 		expect {

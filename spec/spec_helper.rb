@@ -7,6 +7,8 @@ require 'rspec'
 
 require 'loggability/spechelpers'
 
+require 'pushdown'
+
 
 ### Mock with RSpec
 RSpec.configure do |config|
