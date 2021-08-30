@@ -21,11 +21,11 @@ module Pushdown
 	# Loggability API -- create a logger for Pushdown classes and modules
 	log_as :pushdown
 
-	autoload :Transition, 'pushdown/transition'
-	autoload :State, 'pushdown/state'
-	autoload :Automaton, 'pushdown/automaton'
-
 end # module Pushdown
+
+require 'pushdown/transition'
+require 'pushdown/state'
+require 'pushdown/automaton'
 
 Pushdown::Transition.plugin_exclusions( '**/spec/pushdown/transition/**' )
 Pushdown::Transition.load_all

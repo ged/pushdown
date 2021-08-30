@@ -49,6 +49,10 @@ and generate the API documentation.
 
 * Michael Granger <ged@faeriemud.org>
 
+While Pushdown does not contain any [Amethyst Game Engine][amethyst] source code, it does borrow heavily from its ideas and nomenclature. Many thanks to the Amethyst team for the inspiration.
+
+Thanks also to Alyssa Verkade for the initial idea.
+
 
 ## License
 
@@ -80,6 +84,6 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
+[amethyst]: https://amethyst.rs/
 [amethyst-state-manager]: https://book.amethyst.rs/stable/concepts/state.html#state-manager
 

@@ -106,5 +106,23 @@ class Pushdown::State
 			gsub( /([a-z])([A-Z])/ ) { "#$1 #$2" }.downcase
 	end
 
+
+	### Create a new instance of Pushdown::Transition named +transition_name+ that
+	### has been declared using one of the Transition Declaration methods.
+	def transition( transition_name, automaton, stack_name )
+		self.log.debug "Looking up the %p transition for %p via %p" %
+			[ transition_name, self, automaton ]
+
+		transition_type, state_class_name = self.class.transitions[ transition_name ]
+		raise "no such transition %p for %p" % [ transition_name, self.class ] unless transition_type
+
+		if state_class_name
+			state_class = automaton.class.pushdown_state_class( stack_name, state_class_name )
+			return Pushdown::Transition.create( transition_type, transition_name, state_class )
+		else
+			return Pushdown::Transition.create( transition_type, transition_name )
+		end
+	end
+
 end # class Pushdown::State
 

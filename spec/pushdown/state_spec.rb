@@ -14,7 +14,16 @@ RSpec.describe( Pushdown::State ) do
 	end
 
 	let( :starting_state_class ) do
-		Class.new( described_class )
+		Class.new( subclass )
+	end
+
+	let( :automaton_class ) do
+		extended_class = Class.new
+		extended_class.extend( Pushdown::Automaton )
+		extended_class.const_set( :Starting, starting_state_class )
+		extended_class.pushdown_state( :state, initial_state: :starting )
+
+		return extended_class
 	end
 
 
@@ -83,6 +92,22 @@ RSpec.describe( Pushdown::State ) do
 
 	end
 
+
+	describe "transition creation" do
+
+		it "can create a transition it has declared" do
+			subclass.transition_push( :start, :starting )
+			instance = subclass.new
+
+			automaton = automaton_class.new
+
+			result = instance.transition( :start, automaton, :state )
+			expect( result ).to be_a( Pushdown::Transition::Push )
+			expect( result.name ).to eq( :start )
+			expect( result.data ).to be_nil
+		end
+
+	end
 
 end
 

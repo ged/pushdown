@@ -29,6 +29,57 @@ module Pushdown::Automaton
 	end
 
 
+	# A mixin to add instance methods for setting up pushdown states.
+	module InstanceMethods
+
+		### Overload the initializer to push the initial state object for any pushdown
+		### states.
+		def initialize( * )
+			super if defined?( super )
+
+			self.class.pushdown_states.each do |name, config|
+				self.log.debug "Pushing initial %s" % [ name ]
+
+				state_class = self.class.public_send( "initial_#{name}" ) or
+					raise "unset initial_%s while pushing initial state" % [ name ]
+
+				data = if self.respond_to?( "initial_#{name}_data" )
+						self.public_send( "initial_#{name}_data" )
+					else
+						nil
+					end
+
+				self.log.info "Pushing an instance of %p as the initial state." % [ state_class ]
+				transition = Pushdown::Transition.create( :push, :initial, state_class, data )
+				self.log.debug " applying %p to an new empty stack" % [ transition ]
+				stack = transition.apply( [] )
+				self.instance_variable_set( "@#{name}_stack", stack )
+			end
+		end
+
+
+		### The body of the event handler, called by the #handle_{name}_event.
+		def handle_pushdown_result( stack, result, name )
+			if result.is_a?( Symbol )
+				current_state = stack.last
+				result = current_state.transition( result, self, name )
+			end
+
+			if result.is_a?( Pushdown::Transition )
+				new_stack = result.apply( stack )
+				stack.replace( new_stack )
+			end
+
+			return result
+		end
+
+
+		# :TODO: Methods that call #update, #on_event, etc. and then manage the
+		# application of any transition(s) that are returned.
+
+	end # module InstanceMethods
+
+
 	### Generate the pushdown API methods for the pushdown automaton with the given
 	### +name+ and install them in the extending +object+.
 	def self::install_state_methods( name, object )
@@ -125,65 +176,6 @@ module Pushdown::Automaton
 			return self.pushdown_state_class( name, class_name )
 		end
 	end
-
-
-	# A mixin to add instance methods for setting up pushdown states.
-	module InstanceMethods
-
-		### Overload the initializer to push the initial state object for any pushdown
-		### states.
-		def initialize( * )
-			super if defined?( super )
-
-			self.class.pushdown_states.each do |name, config|
-				self.log.debug "Pushing initial %s" % [ name ]
-
-				state_class = self.class.public_send( "initial_#{name}" ) or
-					raise "unset initial_%s while pushing initial state" % [ name ]
-
-				data = if self.respond_to?( "initial_#{name}_data" )
-						self.public_send( "initial_#{name}_data" )
-					else
-						nil
-					end
-
-				transition = Pushdown::Transition.create( :push, :initial, state_class, data )
-				stack = transition.apply( [] )
-				self.instance_variable_set( "@#{name}_stack", stack )
-			end
-		end
-
-
-		### The body of the event handler, called by the #handle_{name}_event.
-		def handle_pushdown_result( stack, result, name )
-			if result.is_a?( Symbol )
-				transition_name = result
-				current_state = stack.last
-				self.log.debug "Looking up the %p transition for %p" % [ result, current_state ]
-				transition_type, state_class_name = current_state.class.transitions[ transition_name ]
-				raise "no such transition %p for %s" % [ transition_name, name ] unless transition_type
-
-				result = if state_class_name
-						state_class = self.class.pushdown_state_class( name, state_class_name )
-						Pushdown::Transition.create( transition_type, transition_name, state_class )
-					else
-						Pushdown::Transition.create( transition_type, transition_name )
-					end
-			end
-
-			if result.is_a?( Pushdown::Transition )
-				new_stack = result.apply( stack )
-				stack.replace( new_stack )
-			end
-
-			return result
-		end
-
-
-		# :TODO: Methods that call #update, #on_event, etc. and then manage the
-		# application of any transition(s) that are returned.
-
-	end # module InstanceMethods
 
 
 	### Declare a attribute +name+ which is a pushdown state.

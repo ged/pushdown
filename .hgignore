@@ -10,3 +10,4 @@ doc/
 \.sqlite$
 etc/key(\.pub)?
 \.pid$
+pkg/
