@@ -43,7 +43,8 @@ class Pushdown::State
 			self.transitions[ transition_name ] = [ type, *args ]
 		end
 
-		method_name = "transition_#{type}"
+		method_name = "transition_%s" % [ type ]
+		self.log.info "Setting up transition declaration method %p" % [ method_name ]
 		define_singleton_method( method_name, &meth )
 	end
 

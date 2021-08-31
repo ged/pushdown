@@ -17,7 +17,7 @@ class Pushdown::Transition
 	log_to :pushdown
 
 	# Pluggability API -- concrete types live in lib/pushdown/transition/
-	plugin_prefixes 'pushdown/transition/'
+	plugin_prefixes 'pushdown/transition'
 	plugin_exclusions 'spec/**/*'
 
 
