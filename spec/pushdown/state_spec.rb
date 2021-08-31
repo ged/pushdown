@@ -1,4 +1,5 @@
-#!/usr/bin/env rspec -cfd
+# -*- ruby -*-
+# frozen_string_literal: true
 
 require_relative '../spec_helper'
 
@@ -32,7 +33,7 @@ RSpec.describe( Pushdown::State ) do
 	end
 
 
-	describe "event handlers" do
+	describe "transition callbacks" do
 
 		it "has a default (no-op) callback for when it is added to the stack" do
 			instance = subclass.new
@@ -60,17 +61,27 @@ RSpec.describe( Pushdown::State ) do
 	end
 
 
-	describe "update handlers" do
+	describe "event handlers" do
 
-		it "has a default (no-op) interval callback for when it is on the stack" do
+		it "has a default (no-op) event callback" do
 			instance = subclass.new
-			expect( instance.shadow_update(state_data) ).to be_nil
+			expect( instance.on_event(:an_event) ).to be_nil
 		end
 
+	end
+
+
+	describe "interval event handlers" do
 
 		it "has a default (no-op) interval callback for when it is current" do
 			instance = subclass.new
 			expect( instance.update(state_data) ).to be_nil
+		end
+
+
+		it "has a default (no-op) interval callback for when it is on the stack" do
+			instance = subclass.new
+			expect( instance.shadow_update(state_data) ).to be_nil
 		end
 
 	end

@@ -79,10 +79,22 @@ class Pushdown::State
 
 
 	#
-	# State callbacks
+	# Event callbacks
 	#
 
-	### State callback -- interval callback called when the state is the current one.
+	### Event callback -- called by the automaton when its #on_<stackname>_event method
+	### is called. This method can return a Transition or a Symbol which maps to one.
+	def on_event( event )
+		return nil # no-op
+	end
+
+
+	#
+	# Interval callbacks
+	#
+
+	### State callback -- interval callback called when the state is the current
+	### one. This method can return a Transition or a Symbol which maps to one.
 	def update( *data )
 		return nil # no-op
 	end
