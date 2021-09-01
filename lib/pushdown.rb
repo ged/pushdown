@@ -15,7 +15,7 @@ module Pushdown
 	extend Loggability
 
 	# Package version
-	VERSION = '0.1.0'
+	VERSION = '0.2.0'
 
 
 	# Loggability API -- create a logger for Pushdown classes and modules
