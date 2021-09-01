@@ -31,18 +31,19 @@ It's still mostly experimental.
     $ gem install pushdown
 
 
-## Contributing
+## Development
 
-You can check out the current development source with Mercurial via its
-[project page](http://bitbucket.org/ged/pushdown). Or if you prefer
-Git, via [its Github mirror](https://github.com/ged/pushdown).
+You can check out the current source with Git via Gitlab:
+
+    $ hg clone http://hg.sr.ht/~ged/Pushdown
+    $ cd Pushdown
 
 After checking out the source, run:
 
-    $ rake newb
+    $ gem install -Ng
+    $ rake setup
 
-This task will install any missing dependencies, run the tests/specs,
-and generate the API documentation.
+This task will install dependencies, and do any other necessary setup for development.
 
 
 ## Author(s)

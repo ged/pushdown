@@ -17,8 +17,6 @@ RSpec.describe( Pushdown::Transition::Pop ) do
 	let( :state_b ) { state_class.new }
 	let( :state_c ) { state_class.new }
 
-	let( :state_data ) { Object.new }
-
 	let( :stack ) do
 		return [ state_a, state_b, state_c ]
 	end
@@ -35,11 +33,10 @@ RSpec.describe( Pushdown::Transition::Pop ) do
 
 
 	it "passes state data through the transition callbacks" do
-		transition = described_class.new( :pop_test, state_data )
+		transition = described_class.new( :pop_test )
 
-		expect( state_c ).to receive( :on_stop ).with( state_data ).
-			and_return( state_data ).once.ordered
-		expect( state_b ).to receive( :on_resume ).with( state_data ).once.ordered
+		expect( state_c ).to receive( :on_stop ).with( no_args ).once.ordered
+		expect( state_b ).to receive( :on_resume ).with( no_args ).once.ordered
 
 		transition.apply( stack )
 	end

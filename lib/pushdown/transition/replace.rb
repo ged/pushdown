@@ -10,9 +10,11 @@ class Pushdown::Transition::Replace < Pushdown::Transition
 
 	### Create a transition that will Replace all the states on the current stack
 	### with an instance of the given +state_class+.
-	def initialize( name, state_class, *args )
-		super( name, *args )
+	def initialize( name, state_class, data=nil )
+		super( name )
+
 		@state_class = state_class
+		@data = data
 	end
 
 
@@ -24,18 +26,22 @@ class Pushdown::Transition::Replace < Pushdown::Transition
 	# The State to replace the stack members with.
 	attr_reader :state_class
 
+	##
+	# The data object to pass to the #state_class's constructor
+	attr_reader :data
+
 
 	### Apply the transition to the given +stack+.
 	def apply( stack )
-		state = self.state_class.new
+		state = self.state_class.new( self.data )
 
 		self.log.debug "replacing current state with a new state: %p" % [ state ]
 		while ( old_state = stack.pop )
-			self.data = old_state.on_stop( self.data )
+			old_state.on_stop
 		end
 
 		stack.push( state )
-		state.on_start( self.data )
+		state.on_start
 
 		return stack
 	end

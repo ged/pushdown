@@ -11,9 +11,11 @@ class Pushdown::Transition::Push < Pushdown::Transition
 
 	### Create a transition that will Push an instance of the given +state_class+ to
 	### the stack.
-	def initialize( name, state_class, *args )
-		super( name, *args )
+	def initialize( name, state_class, data=nil )
+		super( name )
+
 		@state_class = state_class
+		@data = data
 	end
 
 
@@ -25,15 +27,19 @@ class Pushdown::Transition::Push < Pushdown::Transition
 	# The State to push to.
 	attr_reader :state_class
 
+	##
+	# The data object to pass to the #state_class's constructor
+	attr_reader :data
+
 
 	### Apply the transition to the given +stack+.
 	def apply( stack )
-		state = self.state_class.new
+		state = self.state_class.new( self.data )
 
 		self.log.debug "pushing a new state: %p" % [ state ]
-		self.data = stack.last.on_pause( self.data ) if stack.last
+		stack.last.on_pause if stack.last
 		stack.push( state )
-		state.on_start( self.data )
+		state.on_start
 
 		return stack
 	end

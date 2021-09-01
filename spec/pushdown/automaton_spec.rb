@@ -137,7 +137,7 @@ RSpec.describe( Pushdown::Automaton ) do
 				return self.state_data ||= {}
 			end
 
-			starting_state.define_method( :on_start ) do |data|
+			starting_state.define_method( :on_start ) do
 				data[:starting_started] = true
 			end
 

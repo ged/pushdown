@@ -55,25 +55,25 @@ RSpec.describe( Pushdown::State ) do
 
 		it "has a default (no-op) callback for when it is added to the stack" do
 			instance = subclass.new
-			expect( instance.on_start(state_data) ).to be_nil
+			expect( instance.on_start ).to be_nil
 		end
 
 
 		it "has a default (no-op) callback for when it is removed from the stack" do
 			instance = subclass.new
-			expect( instance.on_stop(state_data) ).to be_nil
+			expect( instance.on_stop ).to be_nil
 		end
 
 
 		it "has a default (no-op) callback for when it is pushed down on the stack" do
 			instance = subclass.new
-			expect( instance.on_pause(state_data) ).to be_nil
+			expect( instance.on_pause ).to be_nil
 		end
 
 
 		it "has a default (no-op) callback for when the stack is popped and it becomes current again" do
 			instance = subclass.new
-			expect( instance.on_resume(state_data) ).to be_nil
+			expect( instance.on_resume ).to be_nil
 		end
 
 	end
@@ -93,13 +93,13 @@ RSpec.describe( Pushdown::State ) do
 
 		it "has a default (no-op) interval callback for when it is current" do
 			instance = subclass.new
-			expect( instance.update(state_data) ).to be_nil
+			expect( instance.update ).to be_nil
 		end
 
 
 		it "has a default (no-op) interval callback for when it is on the stack" do
 			instance = subclass.new
-			expect( instance.shadow_update(state_data) ).to be_nil
+			expect( instance.shadow_update ).to be_nil
 		end
 
 	end
@@ -134,6 +134,18 @@ RSpec.describe( Pushdown::State ) do
 			expect( result ).to be_a( Pushdown::Transition::Push )
 			expect( result.name ).to eq( :start )
 			expect( result.data ).to be_nil
+		end
+
+
+		it "can create a transition it has declared that doesn't take a state class" do
+			subclass.transition_pop( :quit )
+			instance = subclass.new
+
+			automaton = automaton_class.new
+
+			result = instance.transition( :quit, automaton, :state )
+			expect( result ).to be_a( Pushdown::Transition::Pop )
+			expect( result.name ).to eq( :quit )
 		end
 
 	end

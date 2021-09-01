@@ -26,8 +26,8 @@ class Pushdown::Transition::Pop < Pushdown::Transition
 
 		self.log.debug "popping a state"
 		@popped_state = stack.pop
-		self.data = @popped_state.on_stop( self.data )
-		stack.last.on_resume( self.data )
+		@popped_state.on_stop
+		stack.last.on_resume
 
 		return stack
 	end

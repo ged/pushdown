@@ -57,31 +57,46 @@ class Pushdown::State
 	end
 
 
+	### Set up new States with an optional +data+ object.
+	def initialize( data=nil )
+		@data = data
+	end
+
+
+	######
+	public
+	######
+
+	##
+	# The state data object that was used to create the State (if any)
+	attr_reader :data
+
+
 	#
 	# Stack callbacks
 	#
 
 	### Stack callback -- called when the state is added to the stack.
-	def on_start( data=nil )
+	def on_start
 		return nil # no-op
 	end
 
 
 	### Stack callback -- called when the state is removed from the stack.
-	def on_stop( data=nil )
+	def on_stop
 		return nil # no-op
 	end
 
 
 	### Stack callback -- called when another state is pushed over this one.
-	def on_pause( data=nil )
+	def on_pause
 		return nil # no-op
 	end
 
 
 	### Stack callback -- called when another state is popped off from in front of
 	### this one, making it the current state.
-	def on_resume( data=nil )
+	def on_resume
 		return nil # no-op
 	end
 
@@ -146,7 +161,10 @@ class Pushdown::State
 
 		if state_class_name
 			state_class = automaton.class.pushdown_state_class( stack_name, state_class_name )
-			return Pushdown::Transition.create( transition_type, transition_name, state_class )
+			state_data = self.data
+
+			return Pushdown::Transition.
+				create( transition_type, transition_name, state_class, state_data )
 		else
 			return Pushdown::Transition.create( transition_type, transition_name )
 		end

@@ -28,6 +28,7 @@ RSpec.describe( Pushdown::Transition::Replace ) do
 
 
 	it "replaces the current stack members with a single new instance of a state when applied" do
+		stack = [ state_class.new, state_class.new ]
 		transition = described_class.new( :replace_test, other_state_class )
 
 		new_stack = transition.apply( stack )
@@ -38,18 +39,31 @@ RSpec.describe( Pushdown::Transition::Replace ) do
 	end
 
 
-	it "passes state data through the transition callbacks" do
-		transition = described_class.new( :replace_test, other_state_class, state_data )
+	it "passes on state data to the new state if given" do
+		stack = []
+		transition = described_class.new( :replace_test, state_class, state_data )
 
-		expect( state_c ).to receive( :on_stop ).
-			with( state_data ).once.and_return( state_data ).ordered
-		expect( state_b ).to receive( :on_stop ).
-			with( state_data ).once.and_return( state_data ).ordered
-		expect( state_a ).to receive( :on_stop ).
-			with( state_data ).once.and_return( state_data ).ordered
+		new_stack = transition.apply( stack )
 
-		expect( other_state_class ).to receive( :new ).and_return( state_c )
-		expect( state_c ).to receive( :on_start ).with( state_data ).once.ordered
+		expect( new_stack.last.data ).to be( state_data )
+	end
+
+
+	it "calls the transition callbacks of all the former states and the new state" do
+		new_state = instance_double( other_state_class )
+		stack = [
+			state_class.new,
+			state_class.new,
+			other_state_class.new
+		]
+		transition = described_class.new( :replace_test, other_state_class )
+
+		expect( stack[2] ).to receive( :on_stop ).ordered
+		expect( stack[1] ).to receive( :on_stop ).ordered
+		expect( stack[0] ).to receive( :on_stop ).ordered
+
+		expect( other_state_class ).to receive( :new ).and_return( new_state )
+		expect( new_state ).to receive( :on_start ).ordered
 
 		transition.apply( stack )
 	end

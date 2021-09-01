@@ -15,18 +15,12 @@ RSpec.describe( Pushdown::Transition::Switch ) do
 		Class.new( Pushdown::State )
 	end
 
-	let( :state_a ) { state_class.new }
-	let( :state_b ) { state_class.new }
-	let( :state_c ) { other_state_class.new }
-
-	let( :stack ) do
-		return [ state_a, state_b ]
-	end
-
 	let( :state_data ) { Object.new }
 
 
-	it "pops the current state off the stack and adds a new state when applied" do
+
+	it "switches the current state the stack with a new one when applied" do
+		stack = [ state_class.new, state_class.new ]
 		transition = described_class.new( :switch_test, other_state_class )
 
 		new_stack = transition.apply( stack )
@@ -34,19 +28,43 @@ RSpec.describe( Pushdown::Transition::Switch ) do
 		expect( new_stack ).to be_an( Array )
 		expect( new_stack.length ).to eq( 2 )
 		expect( new_stack.last ).to be_a( other_state_class )
+		expect( new_stack.last.data ).to be_nil
 	end
 
 
-	it "passes state data through the transition callbacks" do
-		transition = described_class.new( :switch_test, other_state_class, state_data )
+	it "passes on state data to the new state if given" do
+		stack = [ state_class.new ]
+		transition = described_class.new( :switch_test, state_class, state_data )
 
-		expect( state_b ).to receive( :on_stop ).
-			with( state_data ).once.and_return( state_data ).ordered
+		new_stack = transition.apply( stack )
 
-		expect( other_state_class ).to receive( :new ).and_return( state_c )
-		expect( state_c ).to receive( :on_start ).with( state_data ).once.ordered
+		expect( new_stack.last.data ).to be( state_data )
+	end
+
+
+	it "calls the transition callbacks of the former current state and the new state" do
+		new_state = instance_double( other_state_class )
+		stack = [
+			state_class.new,
+			state_class.new
+		]
+		transition = described_class.new( :switch_test, other_state_class )
+
+		expect( stack.last ).to receive( :on_stop )
+		expect( other_state_class ).to receive( :new ).and_return( new_state )
+		expect( new_state ).to receive( :on_start )
 
 		transition.apply( stack )
+	end
+
+
+	it "errors if applied to an empty stack" do
+		stack = []
+		transition = described_class.new( :switch_test, other_state_class )
+
+		expect {
+			transition.apply( stack )
+		}.to raise_error( Pushdown::TransitionError, /can't switch/i )
 	end
 
 end
