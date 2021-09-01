@@ -49,6 +49,14 @@ class Pushdown::State
 	end
 
 
+	### Return the transition's type as a lowercase Symbol, such as that specified
+	### in transition declarations.
+	def self::type_name
+		class_name = self.name or return :anonymous
+		return class_name.sub( /.*::/, '' ).downcase.to_sym
+	end
+
+
 	#
 	# Stack callbacks
 	#
@@ -110,6 +118,13 @@ class Pushdown::State
 	#
 	# Introspection/information
 	#
+
+	### Return the transition's type as a lowercase Symbol, such as that specified
+	### in transition declarations.
+	def type_name
+		return self.class.type_name
+	end
+
 
 	### Return a description of the State as an engine phrase.
 	def description

@@ -63,5 +63,13 @@ class Pushdown::Transition
 			[ self.class, __method__ ]
 	end
 
+
+	### Return the transition's type as a lowercase Symbol, such as that specified
+	### in transition declarations.
+	def type_name
+		class_name = self.class.name or return :anonymous
+		return class_name.sub( /.*::/, '' ).downcase.to_sym
+	end
+
 end # class Pushdown::Transition
 

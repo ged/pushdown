@@ -33,6 +33,24 @@ RSpec.describe( Pushdown::State ) do
 	end
 
 
+	it "knows what the name of its type is" do
+		starting_state_class.singleton_class.attr_accessor :name
+		starting_state_class.name = 'Acme::State::Starting'
+
+		state = starting_state_class.new
+
+		expect( state.type_name ).to eq( :starting )
+	end
+
+
+	it "handles anonymous classes for #type_name" do
+		transition = starting_state_class.new
+
+		expect( transition.type_name ).to eq( :anonymous )
+	end
+
+
+
 	describe "transition callbacks" do
 
 		it "has a default (no-op) callback for when it is added to the stack" do

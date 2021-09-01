@@ -69,6 +69,23 @@ RSpec.describe( Pushdown::Transition ) do
 			expect( result.last ).to be_a( state_class )
 		end
 
+
+		it "knows what the name of its type is" do
+			subclass.singleton_class.attr_accessor :name
+			subclass.name = 'Acme::Transition::Frobnicate'
+
+			transition = subclass.new( :rejigger, state_class )
+
+			expect( transition.type_name ).to eq( :frobnicate )
+		end
+
+
+		it "handles anonymous classes for #type_name" do
+			transition = subclass.new( :rejigger, state_class )
+
+			expect( transition.type_name ).to eq( :anonymous )
+		end
+
 	end
 
 
