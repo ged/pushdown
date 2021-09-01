@@ -4,6 +4,7 @@ README.md
 lib/pushdown.rb
 lib/pushdown/automaton.rb
 lib/pushdown/exceptions.rb
+lib/pushdown/spec_helpers.rb
 lib/pushdown/state.rb
 lib/pushdown/transition.rb
 lib/pushdown/transition/pop.rb
@@ -11,6 +12,7 @@ lib/pushdown/transition/push.rb
 lib/pushdown/transition/replace.rb
 lib/pushdown/transition/switch.rb
 spec/pushdown/automaton_spec.rb
+spec/pushdown/spec_helpers_spec.rb
 spec/pushdown/state_spec.rb
 spec/pushdown/transition/pop_spec.rb
 spec/pushdown/transition/push_spec.rb
