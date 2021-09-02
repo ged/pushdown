@@ -103,9 +103,9 @@ module Pushdown::SpecHelpers
 
 
 		### Specify that the operation that should cause the transition is the #on_event callback.
-		def on_an_event( event )
+		def on_an_event( event, *args )
 			raise ScriptError, "can't specify more than one callback" if self.callback
-			@callback = [ :on_event, event ]
+			@callback = [ :on_event, event, *args ]
 			return self
 		end
 		alias_method :on_event, :on_an_event

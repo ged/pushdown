@@ -352,6 +352,19 @@ RSpec.describe( Pushdown::SpecHelpers ) do
 		end
 
 
+		it "supports giving additional arguments to pass the #on_event operation" do
+			state_class.transition_push( :change, :other )
+
+			state = state_class.new
+			expect( state ).to receive( :on_event ).with( :foo, 1, "another arg" ).
+				and_return( :change )
+
+			expect {
+				expect( state ).to transition.on_an_event( :foo, 1, "another arg" )
+			}.to_not raise_error
+		end
+
+
 		it "adds the callback to the description if on_update is specified" do
 			state_class.transition_push( :change, :other )
 
