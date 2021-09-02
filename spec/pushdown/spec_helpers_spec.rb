@@ -386,6 +386,19 @@ RSpec.describe( Pushdown::SpecHelpers ) do
 			}.to fail_matching( /transition when #on_event is called with :foo/i )
 		end
 
+
+		it "handles multiple callback arguments on failures" do
+			state_class.transition_push( :change, :other )
+
+			state = state_class.new
+			allow( state ).to receive( :on_event ).with( :foo, 18, "nebraska" ).
+				and_return( nil )
+
+			expect {
+				expect( state ).to transition.on_an_event( :foo, 18, "nebraska" )
+			}.to fail_matching( /#on_event is called with :foo, 18, "nebraska"/i )
+		end
+
 	end
 
 	describe "negated matcher" do

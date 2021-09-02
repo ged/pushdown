@@ -182,9 +182,9 @@ module Pushdown::SpecHelpers
 			desc << " to %s" % [ self.target_state ] if self.target_state
 
 			if self.callback
-				methname, arg = self.callback
+				methname, *args = self.callback
 				desc << " when #%s is called" % [ methname ]
-				desc << " with %p" % [ arg ] if arg
+				desc << " with %s" % [ args.map(&:inspect).join(', ') ] if !args.empty?
 			end
 
 			desc << ', but '
