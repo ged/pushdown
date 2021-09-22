@@ -1,6 +1,14 @@
 # Release History for pushdown
 
 ---
+## v0.4.0 [2021-09-21] Michael Granger <ged@faeriemud.org>
+
+Improvements:
+
+- Report operator arguments in the spec matcher failure output.
+- Allow the State event callback to accept additional arguments.
+
+
 ## v0.3.0 [2021-09-01] Michael Granger <ged@faeriemud.org>
 
 Change:
