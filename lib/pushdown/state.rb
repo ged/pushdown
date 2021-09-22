@@ -107,7 +107,7 @@ class Pushdown::State
 
 	### Event callback -- called by the automaton when its #on_<stackname>_event method
 	### is called. This method can return a Transition or a Symbol which maps to one.
-	def on_event( event )
+	def on_event( event, *args )
 		return nil # no-op
 	end
 

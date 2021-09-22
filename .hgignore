@@ -1,5 +1,6 @@
 html/
 docs/
+coverage/
 spec/\.status
 \.devel$
 \.lock$
